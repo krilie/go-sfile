@@ -2,8 +2,8 @@ package main
 
 import (
 	"github.com/gin-gonic/gin"
+	s_file "github.com/krilie/s-file"
 	"log"
-	s_file "s-file"
 )
 
 func main() {

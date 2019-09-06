@@ -2,9 +2,9 @@ package s_file
 
 import (
 	"context"
+	"github.com/krilie/s-file/file_util"
 	"io"
 	"os"
-	"s-file/file_util"
 )
 
 type SFile struct {
