@@ -1,4 +1,4 @@
-module s-file
+module github.com/krilie/s-file
 
 go 1.13
 
