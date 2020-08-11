@@ -19,7 +19,7 @@ func NewSFile(Dir string) *SFile {
 	return &SFile{Dir: Dir}
 }
 
-func (a *SFile) SaveFile(ctx context.Context, name string, f io.ReadSeeker) (content, key string, err error) {
+func (a *SFile) SaveFile(ctx context.Context, name string, f io.Reader) (content, key string, err error) {
 	return file_util.SaveFile(ctx, a.Dir, name, f)
 }
 func (a *SFile) DeleteFile(ctx context.Context, key string) error {

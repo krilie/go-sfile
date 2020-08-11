@@ -1,34 +1,19 @@
 package file_util
 
 import (
+	"bytes"
 	"context"
-	"crypto/sha256"
-	"encoding/hex"
 	"io"
 	"net/http"
 )
 
-func GetFileContent(ctx context.Context, file io.ReadSeeker) (content string, err error) {
+// GetContentType2 从file中读出最多512字节用于确定类型 并所回一个新的reader供后续使用
+func GetContentType(ctx context.Context, file io.Reader) (mType string, newReader io.Reader, err error) {
 	decByte := make([]byte, 512)
-	if _, err := file.Read(decByte); err != nil {
-		return "", err
+	if readLen, err := file.Read(decByte); err != nil {
+		return "", file, err
+	} else {
+		contentType := http.DetectContentType(decByte[0:readLen])
+		return contentType, io.MultiReader(bytes.NewReader(decByte[0:readLen]), file), nil
 	}
-	if _, err := file.Seek(0, io.SeekStart); err != nil {
-		return "", err
-	}
-	contentType := http.DetectContentType(decByte)
-	return contentType, nil
-}
-
-func GetFileSha256(ctx context.Context, file io.ReadSeeker) (sha string, err error) {
-	defer func() {
-		_, err = file.Seek(0, io.SeekStart)
-	}()
-	hash := sha256.New()
-	_, err = io.Copy(hash, file)
-	if err != nil {
-		return "", err
-	}
-	sum := hash.Sum(nil)
-	return hex.EncodeToString(sum), nil
 }
